@@ -31,12 +31,12 @@ public class GameController {
     }
 
     @GetMapping("/boards/{key}")
-    public ResponseEntity<GameDto> getBoard(@PathVariable("key") String key) {
+    public ResponseEntity<GameDto> getCurrentBoard(@PathVariable("key") String key) {
         return new ResponseEntity<>(processor.getBoard(key), HttpStatus.OK);
     }
 
     @PutMapping("/boards")
-    public ResponseEntity<GameDto> getBoard(@RequestBody Board board, HttpServletRequest request) {
+    public ResponseEntity<GameDto> updateBoard(@RequestBody Board board, HttpServletRequest request) {
         Cookie cookie = Arrays.stream(request.getCookies())
                 .filter(c -> c.getName().equals(COOKIE_BOARD_KEY))
                 .findFirst()
