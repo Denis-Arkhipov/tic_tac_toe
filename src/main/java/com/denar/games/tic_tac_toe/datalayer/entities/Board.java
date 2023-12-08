@@ -1,26 +1,29 @@
 package com.denar.games.tic_tac_toe.datalayer.entities;
 
+import com.denar.games.tic_tac_toe.datalayer.enums.GameStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-//@Entity
-//@Getter
-//@Setter
-public class Board {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String cell0;
-    private String cell1;
-    private String cell2;
-    private String cell3;
-    private String cell4;
-    private String cell5;
-    private String cell6;
-    private String cell7;
-    private String cell8;
+import java.util.Map;
+import java.util.UUID;
 
-//    @OneToOne
-    private Game game;
+@Entity
+@Getter
+@Setter
+public class Board {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    private UUID key = UUID.randomUUID();
+
+    @Enumerated(EnumType.STRING)
+    private GameStatus status = GameStatus.GAME;
+
+    @OneToMany
+    @JoinTable(
+            name="BoardCells",
+            joinColumns={@JoinColumn(name="board_id", referencedColumnName="id")})
+    @MapKey(name = "index")
+    private Map<Integer, Cell> cells;
 }
