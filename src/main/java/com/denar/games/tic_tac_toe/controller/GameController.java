@@ -43,7 +43,7 @@ public class GameController {
     }
 
     private Cookie createBoardCookie(String boardKey) {
-        Cookie cookie = new Cookie("boardKey", boardKey);
+        Cookie cookie = new Cookie(COOKIE_BOARD_KEY, boardKey);
         cookie.setPath("/");
 
         return cookie;
