@@ -1,5 +1,6 @@
 package com.denar.games.tic_tac_toe.controller;
 
+import com.denar.games.tic_tac_toe.datalayer.entities.Board;
 import com.denar.games.tic_tac_toe.dto.GameDto;
 import com.denar.games.tic_tac_toe.services.GameProcessor;
 import jakarta.servlet.http.Cookie;
@@ -8,12 +9,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,10 +27,25 @@ public class GameController {
         GameDto gameDto = processor.newGame(initiator);
         response.addCookie(createBoardCookie(gameDto.getGameId().toString()));
 
-        return new ResponseEntity<>(gameDto, HttpStatus.OK);
+        return new ResponseEntity<>(gameDto, HttpStatus.CREATED);
     }
 
-    @PostMapping("/step")
+    @GetMapping("/boards/{key}")
+    public ResponseEntity<GameDto> getBoard(@PathVariable("key") String key) {
+        return new ResponseEntity<>(processor.getBoard(key), HttpStatus.OK);
+    }
+
+    @PutMapping("/boards")
+    public ResponseEntity<GameDto> getBoard(@RequestBody Board board, HttpServletRequest request) {
+        Cookie cookie = Arrays.stream(request.getCookies())
+                .filter(c -> c.getName().equals(COOKIE_BOARD_KEY))
+                .findFirst()
+                .orElse(null);
+        board.setKey(UUID.fromString(cookie.getValue()));
+        return new ResponseEntity<>(processor.updateBoard(board), HttpStatus.OK);
+    }
+
+    @PostMapping("/moves")
     public ResponseEntity<GameDto> makeStep(@RequestParam Integer cellIndex, HttpServletRequest request) {
         Cookie cookie = Arrays.stream(request.getCookies())
                 .filter(c -> c.getName().equals(COOKIE_BOARD_KEY))

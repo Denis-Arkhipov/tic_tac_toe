@@ -34,17 +34,14 @@ public class GameProcessor {
         return new GameDto(board.getKey(), board, board.getStatus());
     }
 
-    public int makeMovePC(Board board) {
-        int cellIndex = random.nextInt(UPPERBOUND);
-        Map<Integer, Cell> cells = board.getCells();
-        Set<Integer> keys = cells.keySet();
+    public GameDto getBoard(String key) {
+        Board board = boardRepository.findByKey(UUID.fromString(key));
+        return new GameDto(board.getKey(), board, board.getStatus());
+    }
 
-        while (keys.contains(cellIndex)) {
-            cellIndex = random.nextInt(UPPERBOUND);
-        }
-
-        cells.put(cellIndex, new Cell(cellIndex, CellValues.O));
-        return cellIndex;
+    public GameDto updateBoard(Board board) {
+        Board updatedBoard = boardRepository.save(board);
+        return new GameDto(updatedBoard.getKey(), updatedBoard, updatedBoard.getStatus());
     }
 
     public GameDto processUserMove(String key, int cellIndex) {
@@ -70,6 +67,19 @@ public class GameProcessor {
             moveRepository.save(new Move(PC_INITIATOR, board, board.getCells().get(cellIndex)));
         }
         return new GameDto(board.getKey(), board, board.getStatus());
+    }
+
+    private int makeMovePC(Board board) {
+        int cellIndex = random.nextInt(UPPERBOUND);
+        Map<Integer, Cell> cells = board.getCells();
+        Set<Integer> keys = cells.keySet();
+
+        while (keys.contains(cellIndex)) {
+            cellIndex = random.nextInt(UPPERBOUND);
+        }
+
+        cells.put(cellIndex, new Cell(cellIndex, CellValues.O));
+        return cellIndex;
     }
 
     private GameStatus getStatus(Map<Integer, Cell> cells) {
