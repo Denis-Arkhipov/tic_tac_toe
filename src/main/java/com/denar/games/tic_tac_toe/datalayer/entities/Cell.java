@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Cell {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Long id;
     private Integer index;
 

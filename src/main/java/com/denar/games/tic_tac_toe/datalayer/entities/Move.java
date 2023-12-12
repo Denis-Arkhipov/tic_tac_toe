@@ -14,17 +14,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Move {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Long id;
     private Integer initiator;
     private LocalDateTime date;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "board_id", referencedColumnName = "id")
+    @ManyToOne
     private Board board;
 
-    @ManyToOne
-    @JoinColumn(name = "cell_id")
+    @OneToOne(cascade = CascadeType.REMOVE)
     private Cell cell;
 
     public Move(Integer initiator, Board board, Cell cell) {

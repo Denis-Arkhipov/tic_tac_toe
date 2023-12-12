@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -13,17 +14,14 @@ import java.util.UUID;
 @Setter
 public class Board {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private UUID key = UUID.randomUUID();
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Enumerated(EnumType.STRING)
     private GameStatus status = GameStatus.GAME;
 
     @OneToMany
-    @JoinTable(
-            name="BoardCells",
-            joinColumns={@JoinColumn(name="board_id", referencedColumnName="id")})
+    @JoinColumn(name = "board_id")
     @MapKey(name = "index")
-    private Map<Integer, Cell> cells;
+    private Map<Integer, Cell> cells = new HashMap<>();
 }

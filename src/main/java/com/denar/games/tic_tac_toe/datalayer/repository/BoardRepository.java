@@ -5,6 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.UUID;
 
-public interface BoardRepository extends CrudRepository<Board, Long> {
-    Board findByKey(UUID key);
+public interface BoardRepository extends CrudRepository<Board, UUID> {
 }
