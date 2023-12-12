@@ -23,8 +23,8 @@ DATABASE:
 spring.datasource.url,
 jpa.database-platform  (org.hibernate.dialect.H2Dialect)
 
-# URL Console: http://localhost:8080/h2-console
-# JDBC - jdbc:h2:mem:game
-# Driver Class: org.h2.Driver
-# Username: sa  (По умолчанию)
-# Password:     (По умолчанию пусто)
+- URL Console: http://localhost:8080/h2-console
+- JDBC - jdbc:h2:mem:game
+- Driver Class: org.h2.Driver
+- Username: sa  (По умолчанию)
+- Password:     (По умолчанию пусто)

@@ -1,6 +1,5 @@
 package com.denar.games.tic_tac_toe.controller;
 
-import com.denar.games.tic_tac_toe.datalayer.entities.Board;
 import com.denar.games.tic_tac_toe.dto.GameDto;
 import com.denar.games.tic_tac_toe.services.GameProcessor;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,8 +31,8 @@ public class GameController {
         return new ResponseEntity<>(gameDto, HttpStatus.OK);
     }
 
-    @DeleteMapping("/moves")
-    public ResponseEntity<GameDto> cancelMove(@RequestParam("boardId") String boardId) {
+    @DeleteMapping("/moves/{id}")
+    public ResponseEntity<GameDto> cancelMove(@PathVariable("id") String boardId) {
         return new ResponseEntity<>(processor.cancelLastMove(boardId), HttpStatus.OK);
     }
 

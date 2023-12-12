@@ -25,7 +25,7 @@ public class GameProcessor {
     private final BoardRepository boardRepository;
     private final CellRepository cellRepository;
     private final MoveRepository moveRepository;
-    private final Random random = new Random();
+    private final Random random;
 
     public GameDto newGame(int initiator) {
         Board board = boardRepository.save(new Board());
@@ -34,12 +34,12 @@ public class GameProcessor {
             int cellIndex = getCellIndexPC(board.getCells());
             makeMove(board, cellIndex, PC_INITIATOR);
         }
-        return new GameDto(board.getId(), board, board.getStatus());
+        return new GameDto(board.getId(), board.getCells(), board.getStatus());
     }
 
     public GameDto getBoard(String boardId) {
         Board board = boardRepository.findById(UUID.fromString(boardId)).orElseThrow();
-        return new GameDto(board.getId(), board, board.getStatus());
+        return new GameDto(board.getId(), board.getCells(), board.getStatus());
     }
 
     public GameDto processUserMove(String boardId, int cellIndex) {
@@ -50,7 +50,7 @@ public class GameProcessor {
             int cellIndexPC = getCellIndexPC(board.getCells());
             makeMove(board, cellIndexPC, PC_INITIATOR);
         }
-        return new GameDto(board.getId(), board, board.getStatus());
+        return new GameDto(board.getId(), board.getCells(), board.getStatus());
     }
 
     public GameDto cancelLastMove(String boardId) {
@@ -60,7 +60,7 @@ public class GameProcessor {
 
         move.forEach(moveRepository::delete);
         Board board = boardRepository.findById(UUID.fromString(boardId)).orElseThrow();
-        return new GameDto(board.getId(), board, board.getStatus());
+        return new GameDto(board.getId(), board.getCells(), board.getStatus());
     }
 
     private void makeMove(Board board, int cellIndex, int initiator) {
@@ -87,6 +87,12 @@ public class GameProcessor {
         return cellIndex;
     }
 
+    /**
+     * Checks winning combinations
+     *
+     * @param cells filled with values
+     * @return game status indicating who won or dead heat
+     */
     private GameStatus getGameStatus(Map<Integer, Cell> cells) {
         GameStatus status = GameStatus.GAME;
 
@@ -109,6 +115,9 @@ public class GameProcessor {
         return status;
     }
 
+    /**
+     * Checks whether cells have the same values
+     */
     private boolean checkWinCombination(Cell cell1, Cell cell2, Cell cell3) {
         boolean win = false;
 
