@@ -42,12 +42,6 @@ public class GameProcessor {
         return new GameDto(board.getId(), board, board.getStatus());
     }
 
-    public GameDto updateBoard(Board data) {
-        Board board = boardRepository.findById(data.getId()).orElse(data);
-        Board updatedBoard = boardRepository.save(board);
-        return new GameDto(updatedBoard.getId(), updatedBoard, updatedBoard.getStatus());
-    }
-
     public GameDto processUserMove(String boardId, int cellIndex) {
         Board board = boardRepository.findById(UUID.fromString(boardId)).orElseThrow();
         makeMove(board, cellIndex, USER_INITIATOR);

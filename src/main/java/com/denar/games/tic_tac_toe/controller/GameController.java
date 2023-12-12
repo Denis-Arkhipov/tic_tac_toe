@@ -28,15 +28,9 @@ public class GameController {
     }
 
     @PostMapping("/moves")
-    public ResponseEntity<GameDto> makeMove(@RequestParam Integer cellIndex, @RequestParam("boardId") String boardId) {
+    public ResponseEntity<GameDto> makeMove(@RequestParam int cellIndex, @RequestParam("boardId") String boardId) {
         GameDto gameDto = processor.processUserMove(boardId, cellIndex);
         return new ResponseEntity<>(gameDto, HttpStatus.OK);
-    }
-
-    @PutMapping("/boards/{id}")
-    public ResponseEntity<GameDto> updateBoard(@RequestBody Board board, @PathVariable String id) {
-        board.setId(UUID.fromString(id));
-        return new ResponseEntity<>(processor.updateBoard(board), HttpStatus.OK);
     }
 
     @DeleteMapping("/moves")
