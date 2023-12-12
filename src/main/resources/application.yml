@@ -4,7 +4,7 @@ spring:
     name: game
     url: ${DB_URL}  # JDBC - jdbc:h2:mem:game
   jpa:
-    database-platform: ${DB_DIALECT}
+    database-platform: ${DB_DIALECT}  # org.hibernate.dialect.H2Dialect
     show-sql: true
     properties:
       hibernate:
